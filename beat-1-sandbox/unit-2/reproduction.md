@@ -34,15 +34,13 @@ Hi! I'd like to take this one on as my first contribution. I'll reproduce the is
 https://github.com/codepath/pathreview-ai301-fa26-s1/issues/56#issuecomment-5851968134
 
 ```
-Environment: Python 3.11.15, tiktoken 0.14.0, repo: himavanthkar/pathreview-ai301-fa26-s1 (fork of codepath/pathreview-ai301-fa26-s1) @ f89c06f, Linux (x86_64).
+Environment: Python 3.11.15 (sandbox) / 3.13 (confirmed on my own machine), tiktoken 0.14.0 (real library, no substitution needed), repo: himavanthkar/pathreview-ai301-fa26-s1 (fork of codepath/pathreview-ai301-fa26-s1) @ f89c06f, macOS (arm64) + Linux (x86_64) — reproduced on both.
 
 Steps: Ran the issue's exact minimal example:
 
 from ingestion.chunking.structural_chunker import StructuralChunker
 c = StructuralChunker()
 print(len(c.chunk('This is a plain document with no headings at all. ' * 20, {})))
-
-Note: StructuralChunker.__init__ eagerly loads the cl100k_base tiktoken encoding, which requires a one-time network fetch from openaipublic.blob.core.windows.net. My sandbox's network policy blocks that host, so I stubbed tiktoken.get_encoding to return a lightweight whitespace-splitting encoder before constructing StructuralChunker. I have not verified this against the real cl100k_base encoding on a machine with network access; I'm relying on reading the code instead: chunk() only calls self.encoder.encode(...) inside the for section in sections loop (line 42), and for a headingless document _extract_sections() returns [] before that loop ever runs (see root cause below), so the encoder is never invoked in this specific path regardless of which encoder is installed.
 
 Output:
 $ python3 -c "..."
@@ -55,7 +53,7 @@ Root cause, traced through ingestion/chunking/structural_chunker.py, _extract_se
 - At the end of the method, the final section is only saved when current_section_lines and heading_stack (line 124). Since heading_stack is empty for a headingless document, this is also false, so nothing is emitted even if content had been collected.
 - Net effect: _extract_sections() returns [], so chunk()'s for section in sections loop (line 42) never executes, and chunk() returns [].
 
-The existing test test_document_with_no_headings in tests/unit/test_structural_chunker.py already encodes the expected fix (assert len(result) >= 1) and is marked @pytest.mark.xfail(strict=True, reason="issue #56: structural chunker drops documents with no headings"). Ran it directly (with the same tiktoken stub) and confirmed it currently reports XFAIL, matching the seeded-defect note in docs/CONTRIBUTING.md.
+The existing test test_document_with_no_headings in tests/unit/test_structural_chunker.py already encodes the expected fix (assert len(result) >= 1) and is marked @pytest.mark.xfail(strict=True, reason="issue #56: structural chunker drops documents with no headings"), matching the seeded-defect note in docs/CONTRIBUTING.md.
 
 Expected: A document with no headings should still be chunked — as a single block, or via a fallback strategy (the issue leaves this choice open).
 
