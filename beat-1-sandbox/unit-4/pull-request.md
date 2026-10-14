@@ -15,15 +15,11 @@ label is not graded.
 
 **Pull request**
 
-[Link to the pull request you opened. It must be the pull request's own page on the Path
-Review repo, not your fork's branch page.]
+https://github.com/codepath/pathreview-ai301-fa26-s1/pull/212
 
 **Branch**
 
-[The name of the branch the pull request comes from, exactly as it appears in your fork.
-The naming shape is a type prefix, then the issue number, then a short description. **The
-issue number in the branch name must be the number of the issue the pull request fixes** —
-a name carrying any other number does not satisfy this field.]
+fix/56-structural-chunker-no-headings
 
 ## Eval iterations
 
@@ -32,28 +28,55 @@ fields.
 
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+1. Full run of these same skill files in a Claude Code cloud session, before I installed them on my
+   Mac: 20/20 (bar PASS), categories clear-accept 7/7, not-tested 4/4, silent-drift 4/4,
+   standards-wall 2/2, unreviewable 3/3. That session's eval-run.txt is not the one I committed.
+2. Full run on my Mac with `--save-run eval-run.txt`, no file changes in between: 19/20 (bar PASS),
+   categories clear-accept 6/7, not-tested 4/4, silent-drift 4/4, standards-wall 2/2,
+   unreviewable 3/3. This is the committed file: "agreement: 19/20 scored items  (bar: 18/20: PASS)".
 
 **Package analysis**
 
-[Pick one scored package (`pkg-01` through `pkg-20` — the four `calib-` packages are never
-scored). Name it by id, say what your rubric decided and what the gold label said, and
-explain why your rubric read it that way.]
+pkg-11 (ripgrep, keep a backslash-escaped trailing space when trimming gitignore lines). Gold label:
+accept. My rubric decided reject in the committed run, with the table note "failed: Description
+matches diff"; in run 1 the same files accepted it.
+
+The description says: "The trim now stops at a space preceded by an odd number of backslashes,
+matching git. One function touched, tests added for the escaped, unescaped, and double-backslash
+cases." The diff changes `parse_gitignore_line` to call a new helper and adds that helper,
+`fn trim_unescaped_trailing_spaces(line: &str) -> &str`, so read literally the diff touches two
+functions, not one. My "Description matches diff" check fails a PR whose description claims
+something the diff does not contain, and the most likely reading is that the grader took "One
+function touched" as such a claim. The eval-run file records only the failed check's name, not the
+grader's evidence line, so this is my reading of the package rather than a quoted reason. The gold
+label treats the helper as part of the one change (it exists only to implement the fix the plan
+names), and the rest of the package is strong: decisive before/after repro, `cargo test -p ignore`
+named with a result, and the AI disclosure the repo's policy asks for. The two runs disagreeing on
+identical files shows this package sits on the boundary of how literally my check reads a
+description's wording.
 
 **Check rationale**
 
-[Quote one check from the `rubric.md` you uploaded to `tools/pr-precheck/`, exactly as it reads now.
-Then say why it reads that way — what you revised to get there, or what you rejected in
-favour of it.]
+| Description matches diff | The PR title and description's claims about what the change does, read against the diff | Every claim the description makes about what was changed is visible in the diff, and the description does not claim the plan was followed in full when the diff does less or more. Fails when the description says something was done (a docs update, a test, a second fix) that the diff does not contain, or omits a substantive change the diff does make | required |
+
+It reads this way because silent drift has two halves: the diff can do more or less than the plan,
+and the description can claim fidelity the diff contradicts (pkg-17 in the set: the plan promises a
+dev warning and a docs update, the diff contains only the warning, and the description claims both).
+I considered folding both into "Diff matches plan" and rejected that, because a PR can match its
+plan exactly and still describe itself wrongly to a reviewer, and the reviewer only sees the
+description. Keeping it as its own check means the evidence line names the specific false claim. I
+also wrote into it that a description which honestly says something was left out passes, so a
+disclosed shortfall (pkg-13, pkg-16) is not punished.
 
 **Trade-offs**
 
-[Every check gives something up. Any one of these is a complete answer: a package whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+The check reads each description claim against the diff, so it can fail a correct PR over loose
+wording: pkg-11's "One function touched" next to a diff that adds a helper is the case I accept it
+will sometimes miss, and it did in the committed run. Making the check ignore approximate wording
+would let through descriptions like pkg-17's, which claim work that is not in the diff. I did not
+change the check after the committed run, so no canary runs were needed; the evidence that nothing
+else is affected is that both full runs agreed with the gold label on every other package, including
+both standards-wall and all four silent-drift packages.
 
 ---
 
