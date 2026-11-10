@@ -63,11 +63,17 @@ directly instead of running a scan. The scout rejected it on one check, "Not cla
 claim comment and PR #280 were my own. I patched that row to ignore claims and PRs by my own `gh`
 account, logged the change in scan-notes.md, and the re-grade came out accept (6/6 checks pass).
 
-**Unit 6: [one line on the tool work]**
+**Unit 6: Installed the voice guard and wrote a repo memory file for cluv, after my claim was already posted**
 
-[2-4 sentences: the voice-guard, the repo-memory file. What broke or
-fell short, and what changed because of it. "Nothing broke" counts when
-it is true - say how you know.]
+I added an Upstream section to my voice guide (rules for claims, questions, and pings), moved the
+guide to `~/.claude/voice-guard/`, and installed the hook; the wiring test (`gh issue comment --help`
+through Claude Code) was stopped as expected. My claim and PR description were already posted by
+hand, so I ran the guard on them afterwards with `check_voice.py --draft`: both passed, but that
+proves little, because I wrote the claim rules after posting and used my own lines as the "Right"
+examples; the real test will be my next reply or nudge on PR #280. I also wrote a ~30-line
+`CLAUDE.local.md` for cluv (kept out of git with `.git/info/exclude`), and writing it showed the
+repo's own CLAUDE.md is out of date: it calls `cluv status` mock data, but real parsing lives in
+`slurm.py`.
 
 **Unit 7: [one line on the tool work]**
 
@@ -124,7 +130,9 @@ it returned nothing. Per-repo queries for AI orgs I trust would have found cluv 
 - What changed: dropped the keyword phrase and filtered the results myself; next time I would
   write per-repo queries (`--repo` for AI orgs I trust). In the scout, I patched the "Not claimed"
   row to ignore claims and PRs by my own `gh` account and logged it in scan-notes.md; the
-  re-grade came out accept.
+  re-grade came out accept. In Unit 6 I also replaced my "Bounded scope" check with the staff
+  `scope-feasible` row plus a difficulty note, so an open design edge flags difficulty instead
+  of rejecting, and logged that in scan-notes.md too.
 
 ---
 
