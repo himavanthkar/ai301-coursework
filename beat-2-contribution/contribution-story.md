@@ -1,4 +1,4 @@
-# Contribution: [Issue Title]
+# Contribution: Show the size of the storage with `cluv status`
 
 Path: `beat-2-contribution/contribution-story.md`
 
@@ -7,12 +7,11 @@ the repository is not read. **Keep every section header below under its exact na
 format criteria grade exactly that. Your course repo link is the whole submission: no tool
 files and no evidence uploads are part of Assignment 5.
 
-**Contribution Number:** [1]
-**Student:** [Student name]
-**GitHub Username:** [your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comments upstream are identified by this name.]
-**Issue:** [GitHub issue link]
-**Pull Request:** [GitHub PR link, once opened]
+**Contribution Number:** 1
+**Student:** Himavanth Karpurapu
+**GitHub Username:** himavanthkar
+**Issue:** https://github.com/mila-iqia/cluv/issues/252
+**Pull Request:** https://github.com/mila-iqia/cluv/pull/280
 
 One repository, built across units 5 to 8, telling the whole story of your real
 contribution. Fill it as you work, not at the end — the sections below ask for evidence that
@@ -91,6 +90,8 @@ you it held up. **Record the link to your claim comment in this section too.**
 Not claimed yet? Write `claim pending` and today's date where the link goes,
 and add the link the moment your claim lands.]
 
+**Claim comment:** https://github.com/mila-iqia/cluv/issues/252#issuecomment-6750788609 (posted 2026-11-09)
+
 **Toolkit**
 
 - Tool: issue-scout (your scout: your search strategy, your rubric),
@@ -145,8 +146,10 @@ and how you solved them, or that none came up.]
 
 **Reproduction Evidence**
 
-- **Commit showing reproduction:** [link to commit in your fork]
-- **Screenshots/logs:** [if applicable]
+- **Commit showing reproduction:** https://github.com/himavanthkar/cluv/commit/0e7714dd262756fc1236e0168b27e8c33e78a20b (adds `test_bar_shows_used_and_total_size`, which fails on unmodified `master`)
+- **Screenshots/logs:** before the fix, `_bar(40, 75)` / `_bar(148, 500)` printed
+  `▰▰▰▰▰▱▱▱▱▱   53%` / `▰▰▱▱▱▱▱▱▱▱   30%`; the new test failed with
+  `AssertionError: assert '148/500 GiB' in '▰▰▱▱▱▱▱▱▱▱   30%'` (1 failed, 1 passed).
 - **My findings:** [what you discovered during reproduction; an
   honest, evidenced cannot-reproduce that led you to re-pick or ask
   the maintainer belongs here and costs you nothing]
@@ -211,13 +214,23 @@ observable named is not a strategy.]
 [A running log, added to as you work. Date each entry. What you
 built, decisions you made when you made them, wrong turns included.]
 
-**[Date]**
+**2026-11-09**
 
-[Entry]
+Picked mila-iqia/cluv#252 (unclaimed good-first-issue in Mila's ML cluster CLI) after checking
+inspect_ai, lighteval, lm-evaluation-harness, ragas and deepeval, where the open good-first-issues
+were either already claimed or stale. Instructor OK'd an issue from outside the course site.
+Posted my claim comment. Forked and cloned, `uv sync` on macOS with CPython 3.13.0 at commit
+`7a06e8b`. Baseline `uv run pytest -m "not integration and not slow" -q`: 337 passed,
+3 failed, 12 xfailed; the 3 failures are `tests/test_hydra_plugin.py::test_hydra_launcher_is_discoverable[source-3.11/3.12/3.13]`,
+which don't touch `status.py`. Reproduced the issue by calling `_bar()` directly:
+`_bar(148, 500)` prints `▰▰▱▱▱▱▱▱▱▱   30%` with no used/total size.
 
-**[Date]**
-
-[Entry]
+Wrote the test first and pushed it on its own (https://github.com/himavanthkar/cluv/commit/0e7714dd262756fc1236e0168b27e8c33e78a20b): the size test failed, the 0-quota test
+passed. Then changed only `_bar()` in `cluv/cli/status.py` to print `used/total GiB (pct%)`, keeping
+the old output when the quota is 0. After: `148/500 GiB (30%)`, both new tests pass, full run
+339 passed / same 3 hydra failures, pre-commit all passed. `pre-commit` isn't in the dev
+dependencies, so I ran it with `uvx 'pre-commit<4.0.0'` like their CI does. Fix commit: https://github.com/himavanthkar/cluv/commit/7fc94ea0e392531f8918759064b48e90c06ccd26.
+Opened https://github.com/mila-iqia/cluv/pull/280 under my own account.
 
 **Toolkit**
 
@@ -230,20 +243,16 @@ built, decisions you made when you made them, wrong turns included.]
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when opened]
+**PR Link:** https://github.com/mila-iqia/cluv/pull/280
 
 **PR Description:** [what the PR says; much of the content above
 adapts into it]
 
 **Maintainer Feedback:**
 
-- [Date]: [feedback received, or "none yet"; silence is a normal
-  state and costs you nothing]
-- [Date]: [how you addressed it]
+- 2026-11-09: automated Copilot review recommended approval, no issues found. No maintainer feedback yet.
 
-**Status:** [Awaiting review / Iterating / Merged / Closed. The
-status is a fact you record, never a grade: the PR is graded as
-opened.]
+**Status:** Awaiting review
 
 **Toolkit**
 
