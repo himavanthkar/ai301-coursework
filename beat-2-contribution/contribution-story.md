@@ -87,10 +87,15 @@ all five of its checks, with one note that my TiB question doesn't say what I'd 
 things fought me: cluv's default branch is `master`, so the gate needs `--base master`, and the hook
 test showed only the ship-gate's stop, not a separate voice-guard stop.
 
-**Unit 8: [one line on the tool work]**
+**Unit 8: Installed the PR monitor, wrote a playbook from cluv's real review times, and kept its draft off the thread**
 
-[2-4 sentences: the PR-monitor and your playbook. What it read, what it
-drafted, what you did with the draft.]
+I wrote my playbook from data: five recent outside PRs to cluv (#234, #231, #241, #240, #247)
+waited 9, 8, 6, 4 and 3 days for their first human review, all from hvdbm, so I set a 12-day
+threshold before one nudge that tags only hvdbm. `monitor.py --state` read PR #280 and labeled it
+FEEDBACK-IN, but the only "review" was Copilot's automated one; the monitor can't tell a bot review
+from a maintainer's. The full run still got it right because my playbook says bot comments need no
+reply: it drafted a wait note (next check around 2026-11-21), and I posted nothing. Because of the
+mislabel, I now check who the reviewer is before trusting a FEEDBACK-IN state.
 
 ---
 
@@ -286,9 +291,6 @@ implemented.
 
 ## Implementation Notes
 
-[A running log, added to as you work. Date each entry. What you
-built, decisions you made when you made them, wrong turns included.]
-
 **2026-11-09**
 
 Picked mila-iqia/cluv#252 (unclaimed good-first-issue in Mila's ML cluster CLI) after checking
@@ -306,6 +308,16 @@ the old output when the quota is 0. After: `148/500 GiB (30%)`, both new tests p
 339 passed / same 3 hydra failures, pre-commit all passed. `pre-commit` isn't in the dev
 dependencies, so I ran it with `uvx 'pre-commit<4.0.0'` like their CI does. Fix commit: https://github.com/himavanthkar/cluv/commit/7fc94ea0e392531f8918759064b48e90c06ccd26.
 Opened https://github.com/mila-iqia/cluv/pull/280 under my own account.
+
+**2026-11-09, evening**
+
+Ran the course tools on the finished work, after the PR was already open. My Unit 1 issue-select
+skill was missing from my Mac, so I rebuilt the issue-scout and graded #252: reject on my own claim,
+so I patched "Not claimed" and the re-grade was accept. Installed the voice guard; my posted claim
+and PR description both passed it. Wrote a 25-line CLAUDE.local.md for cluv. Installed the
+ship-gate with a 3-check manifest (the 3 hydra tests excluded with a dated reason) and ran it on my
+branch: PASS. Installed the PR monitor and wrote a playbook from cluv's real review times; it
+drafted a wait note, so I posted nothing.
 
 **Toolkit**
 
@@ -330,6 +342,8 @@ layout is preferred for large quotas, discloses that I used Claude Code, and end
 **Maintainer Feedback:**
 
 - 2026-11-09: automated Copilot review recommended approval, no issues found. No maintainer feedback yet.
+- 2026-11-09: I didn't reply to the bot. My PR monitor drafted a wait note (no human review yet,
+  under a day old, nudge threshold 12 days), so I posted nothing and will check again around 2026-11-21.
 
 **Status:** Awaiting review
 
@@ -378,11 +392,6 @@ of filling it in at the end.
 ---
 
 ## Resources Used
-
-[What actually helped, not a reading list. List things this story
-already shows you using: the doc you followed to set the environment
-up, the thread that explained the bug, the person who answered you.
-One real entry beats ten plausible ones.]
 
 - cluv's CONTRIBUTING.md (setup with `uv sync`, skipping `integration` tests): https://github.com/mila-iqia/cluv/blob/master/CONTRIBUTING.md
 - cluv's CI workflow, which showed how they install and run pre-commit: https://github.com/mila-iqia/cluv/blob/master/.github/workflows/build.yaml
