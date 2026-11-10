@@ -70,7 +70,7 @@ guide to `~/.claude/voice-guard/`, and installed the hook; the wiring test (`gh 
 through Claude Code) was stopped as expected. My claim and PR description were already posted by
 hand, so I ran the guard on them afterwards with `check_voice.py --draft`: both passed, but that
 proves little, because I wrote the claim rules after posting and used my own lines as the "Right"
-examples; the real test will be my next reply or nudge on PR #280. I also wrote a ~30-line
+examples; the real test will be my next reply or nudge on PR #280. I also wrote a 25-line
 `CLAUDE.local.md` for cluv (kept out of git with `.git/info/exclude`), and writing it showed the
 repo's own CLAUDE.md is out of date: it calls `cluv status` mock data, but real parsing lives in
 `slurm.py`.
