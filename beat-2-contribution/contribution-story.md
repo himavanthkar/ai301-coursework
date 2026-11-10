@@ -54,10 +54,14 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: [one line on the tool work]**
+**Unit 5: Rebuilt my scout and graded my issue with it after picking it by hand**
 
-[2-4 sentences: what you built (the scout, your strategy), what broke
-or fell short, what changed because of it.]
+My Unit 1 issue-select skill was missing from my Mac, so I rebuilt the scout from my course-repo
+rubric, the Unit 1 evidence guide, and the Unit 5 starter, and added an AI/ML-in-Python fit
+profile. I had already found and claimed cluv#252 by hand with `gh search issues`, so I graded it
+directly instead of running a scan. The scout rejected it on one check, "Not claimed", because the
+claim comment and PR #280 were my own. I patched that row to ignore claims and PRs by my own `gh`
+account, logged the change in scan-notes.md, and the re-grade came out accept (6/6 checks pass).
 
 **Unit 6: [one line on the tool work]**
 
@@ -91,16 +95,20 @@ comments, no assignee and no PR, and the maintainers had merged seven outside co
 in the previous three weeks. It's small and clearly described, which made it a good first issue
 to learn the full fork, test, PR flow on a real AI lab's code.
 
-I didn't use my issue-scout for this pick; I searched by hand under time pressure. The manual
-search showed a gap I'd fix in the scout's strategy: my first query put all my keywords in one
-quoted string, `gh` treated that as an exact phrase, and it returned nothing. A broad search also
-floods you with tiny repos. Per-repo queries for AI orgs I trust would have found cluv faster.
+I searched by hand under time pressure and only graded the issue with my scout after I had
+claimed it, so the scout didn't pick this issue for me. Its first verdict was reject: every check
+passed except "Not claimed", which failed because the claim and the open PR were mine. That showed
+a real gap in my rubric, which can't tell my own claim from a stranger's, so I patched the row and
+the re-grade came out accept. The manual search also showed a gap I'd fix in the scout's strategy:
+my first query put all my keywords in one quoted string, `gh` treated that as an exact phrase, and
+it returned nothing. Per-repo queries for AI orgs I trust would have found cluv faster.
 
 **Claim comment:** https://github.com/mila-iqia/cluv/issues/252#issuecomment-6750788609
 
 **Toolkit**
 
-- Tool: I did not run my issue-scout skill for this pick. I searched by hand with
+- Tool: I found and claimed this issue by hand first, then graded it with my issue-scout
+  (`claude "issue-scout: grade https://github.com/mila-iqia/cluv/issues/252"`). The search was by hand with
   `gh search issues --label "good first issue" --state open --no-assignee --language python
   --created ">=2026-10-19" --sort created --limit 100`, and used Claude Code to open the
   candidate threads on GitHub and check for claims, linked PRs, and recent maintainer merges.
@@ -108,12 +116,15 @@ floods you with tiny repos. Per-repo queries for AI orgs I trust would have foun
   Among real AI/ML projects, inspect_ai's good-first-issues were all claimed (several with
   open PRs), and lighteval / lm-evaluation-harness issues were 1-3 years old. In mila-iqia/cluv,
   #278 already had a PR, #256 had an assignment request and a PR, #193 needed Slurm cluster
-  access, and #252 had no comments, no assignee, and no PR.
+  access, and #252 had no comments, no assignee, and no PR. The scout's first grade on #252 was
+  reject: 5 checks passed, but "Not claimed" failed on my own claim comment and PR #280.
 - Difficulties: my first query passed `"llm OR eval OR ..."` as one quoted argument, so `gh`
   searched for that exact phrase and returned nothing. Popular AI repos get their
   good-first-issues claimed within hours.
-- What changed: dropped the keyword phrase and filtered the results myself. Next time I would
-  write per-repo queries (`--repo` for AI orgs I trust) instead of one broad keyword search.
+- What changed: dropped the keyword phrase and filtered the results myself; next time I would
+  write per-repo queries (`--repo` for AI orgs I trust). In the scout, I patched the "Not claimed"
+  row to ignore claims and PRs by my own `gh` account and logged it in scan-notes.md; the
+  re-grade came out accept.
 
 ---
 
