@@ -75,10 +75,17 @@ examples; the real test will be my next reply or nudge on PR #280. I also wrote 
 repo's own CLAUDE.md is out of date: it calls `cluv status` mock data, but real parsing lives in
 `slurm.py`.
 
-**Unit 7: [one line on the tool work]**
+**Unit 7: Installed the ship-gate and ran it on my already-open PR branch: PASS**
 
-[2-4 sentences: the ship-gate and your gate manifest. What it produced
-on your real branch, what fought you, what changed because of it.]
+I installed the ship-gate and wrote a manifest for mila-iqia/cluv with three checks taken from
+CONTRIBUTING.md and their CI: `uv sync`, the non-integration tests, and
+`uvx 'pre-commit<4.0.0' run --all-files`. The 3 `test_hydra_plugin` tests already fail on master on
+my Mac, so I deselected them in the test command and moved them to the excluded table with the date
+and reason instead of letting them block every run. My PR was already open, so I ran
+`check_gate.py --branch --base master` afterwards: all three checks passed and my pr-precheck passed
+all five of its checks, with one note that my TiB question doesn't say what I'd do by default. Two
+things fought me: cluv's default branch is `master`, so the gate needs `--base master`, and the hook
+test showed only the ship-gate's stop, not a separate voice-guard stop.
 
 **Unit 8: [one line on the tool work]**
 
@@ -328,10 +335,19 @@ layout is preferred for large quotas, discloses that I used Claude Code, and end
 
 **Toolkit**
 
-- Tool: `gh pr create --repo mila-iqia/cluv --base master --head himavanthkar:feat/252-storage-size --body-file pr_body.md`, so the PR is opened under my own account.
-- What it produced: https://github.com/mila-iqia/cluv/pull/280; GitHub's automated Copilot review recommended approval with no issues.
-- Difficulties: the repo needs one human approval to merge, and CI may wait for a maintainer to approve running it for a first-time contributor.
-- What changed: nothing yet; waiting on maintainer review.
+- Tool: `gh pr create --repo mila-iqia/cluv --base master --head himavanthkar:feat/252-storage-size --body-file pr_body.md`
+  opened the PR under my own account, before I had the ship-gate. Afterwards I ran the ship-gate on
+  the same branch: `check_gate.py --branch --base master --title "..." --body-file pr_draft.md`.
+- What it produced: https://github.com/mila-iqia/cluv/pull/280, and a ship-gate PASS: `uv sync`,
+  tests, and pre-commit all ok, and my pr-precheck passed Diff matches plan, Description matches
+  diff, Decisive test evidence, Clean diff, and Repo standards met. GitHub's automated Copilot
+  review also recommended approval with no issues.
+- Difficulties: because I ran it after opening the PR, the gate confirmed the PR rather than
+  gating it. The 3 pre-existing hydra test failures would have stopped every run, and the gate
+  needed `--base master`.
+- What changed: deselected the hydra tests in my manifest's test command and listed them as a
+  dated exclusion. pr-precheck noted my TiB question gives no default; next time I'd say what I'll
+  do if the maintainer has no preference.
 
 ---
 
