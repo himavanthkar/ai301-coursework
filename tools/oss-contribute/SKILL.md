@@ -27,7 +27,7 @@ only when its tool passes.
 
 ## My setup (where things live)
 
-- Work folder: `~/Desktop/open-source-contributions/` (one clone per repo, cloned from MY fork).
+- Work folder: `~/Desktop/"open source contribution claude code ai301"/` (one clone per repo, cloned from MY fork).
 - Course repo: `~/Desktop/"all codepath ai capstone projects"/ai301-coursework` (stories go in
   `beat-2-contribution/`).
 - Skills in `~/.claude/skills/`: `issue-scout`, `repro-check`, `plan-check`, `pr-precheck`.
@@ -63,7 +63,7 @@ and `gh auth status`. If something is missing, tell me before going further.
 
 ## Phase 2: Claim
 
-1. Write `claim-draft.md` (in `~/Desktop/open-source-contributions/ai301-unit6-starter/` or the clone):
+1. Write `claim-draft.md` (in `~/Desktop/"open source contribution claude code ai301"/ai301-unit6-starter/` or the clone):
    - Say I'd like to work on it, what I found from reading the code, and my first concrete step.
    - A loose window ("I'll aim to open a PR within a few days"), never a deadline.
    - At most one question, with my default stated ("Unless you'd prefer X, I'll go with Y").
