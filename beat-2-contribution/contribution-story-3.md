@@ -18,8 +18,10 @@ Sections marked REWRITE are drafts for me to put in my own words.
 ### 2026-11-14 to 2026-11-15: shortlist, claim, setup, design notes
 
 I ran my `oss-contribute` skill, Phase 0 to Phase 3. The scout graded six issues and accepted
-this one with the note "ambitious". repro-check accepted the claim draft as a claim-only package
-and the voice guard passed it. Nothing broke in the tools this round. One friction line went into
+this one with the note "ambitious". The scout and the first repro-check were both graded inside
+the working Claude session with the skill loaded, not as separate runs; a separate repro-check
+run on 2026-11-15 returned accept (details under Reproduction Process). The voice guard was a
+real run and passed. One friction line went into
 the scout's `scan-notes.md`: its "Not claimed" check cannot express a partly claimed issue
 (Nimbus#973), which is a different issue from this one.
 
@@ -46,7 +48,9 @@ five recent merged outside PRs were 0.3, 0.7, 8.7, 10.1 and 14.2; CONTRIBUTING.m
 first response within 5 business days; no AI policy is stated in the repo.
 
 **Toolkit**
-- Tool: issue-scout in direct mode on six URLs, after `gh` health checks from `oss-contribute` Phase 1.
+- Tool: issue-scout in direct mode on six URLs, after `gh` health checks from `oss-contribute`
+  Phase 1. The skill was loaded into the working Claude session and graded there; it was not a
+  separate run of the tool.
 - What it produced: verdict **accept** for cq#393, all required checks passing (recent commits,
   maintainer responsive, scope feasible, not claimed, AI policy), difficulty note "ambitious"
   because of the design-first step.
@@ -124,11 +128,20 @@ This is a feature request, so there is no bug to reproduce. What I confirmed in 
 
 **Toolkit**
 - Tool: repro-check (claim-only mode) on `claim-draft.md`, then the voice guard.
-- What it produced: repro-check **accept**; the two claim-side checks passed (AI disclosure: the
-  repo states no policy; claim respects conventions) and the four repro checks were reported as
-  not yet applicable. Voice guard: `voice-guard: pass. Your rules hold; you can post it.`
-- Difficulties: none met.
-- What changed: nothing.
+- What it produced: before the claim was posted, the repro-check "accept" was an in-session
+  judgment: the skill was loaded into the working Claude session and that session graded the
+  draft against the rubric itself. It was not a separate run of the tool. The voice guard was a
+  real run of `check_voice.py`: `voice-guard: pass. Your rules hold; you can post it.`
+  On 2026-11-15, after the claim was already posted, repro-check was run for real as a separate
+  `claude -p` run on the same `claim-draft.md`. Its verdict: **accept**. AI disclosure
+  compliance: pass (no AI policy in CONTRIBUTING.md or DEVELOPMENT.md, no AGENTS.md). Claim
+  comment respects conventions: pass. The four repro checks: unclear, "not yet applicable:
+  claim-only draft". It also re-checked the claim's code facts against `main` and found them
+  correct.
+- Difficulties: the first check skipped my own process. The claim went out on a judgment, not
+  on the tool's output.
+- What changed: new ground rule 8 in my `oss-contribute` skill: tool checks must be real
+  separate runs of the tool, never an in-session judgment against its rubric.
 
 **Claim:** https://github.com/mozilla-ai/cq/issues/393#issuecomment-6887225214
 (posted 2026-11-15T01:21:05Z; the thread had no assignee, no other claim and no linked PR right

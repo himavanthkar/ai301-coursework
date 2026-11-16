@@ -24,6 +24,9 @@ only when its tool passes.
 6. **Disclose AI use** in every PR description, in my own words, even if the repo doesn't require it.
 7. **Respect the repo's rules over mine**: CONTRIBUTING.md, AGENTS.md, CLAUDE.md, the PR template,
    and its AI policy. If the repo doesn't accept AI-assisted contributions, don't contribute there.
+8. **Tool checks must be real runs.** Tool checks (issue-scout, repro-check, plan-check, pr-precheck,
+   voice guard, ship-gate) must be real separate runs of the tool, never an in-session judgment
+   against its rubric. Report the tool's actual output.
 
 ## My setup (where things live)
 
