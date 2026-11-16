@@ -50,7 +50,8 @@ first response within 5 business days; no AI policy is stated in the repo.
 **Toolkit**
 - Tool: issue-scout in direct mode on six URLs, after `gh` health checks from `oss-contribute`
   Phase 1. The skill was loaded into the working Claude session and graded there; it was not a
-  separate run of the tool.
+  separate run of the tool. A separate `claude -p` run on 2026-11-15 (after my claim, which the
+  rubric ignores) also returned **accept**, difficulty "ambitious", all six checks passing.
 - What it produced: verdict **accept** for cq#393, all required checks passing (recent commits,
   maintainer responsive, scope feasible, not claimed, AI policy), difficulty note "ambitious"
   because of the design-first step.
