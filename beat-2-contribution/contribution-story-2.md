@@ -243,8 +243,12 @@ Code use; ends with `Fixes #257`.
 
 - 2026-11-13: automated Copilot review recommended approval, no issues found. No maintainer feedback
   yet; CI is waiting for a maintainer to approve running workflows for a first-time contributor.
+- 2026-11-16: notoraptor approved (15:51 UTC) and hvdbm approved (16:27 UTC), both with no review
+  comments. hvdbm merged the PR into `master` at 16:27 UTC (merge commit 141f113), and issue #257
+  closed as completed. CI at merge: lint, docs and all eight unit-test jobs passed;
+  `integration_tests` showed a failure, which I have not investigated.
 
-**Status:** Awaiting review
+**Status:** Merged 2026-11-16
 
 **Toolkit**
 - Tool: the ship-gate (`check_gate.py --branch --base master --title ... --body-file pr_draft.md`),
