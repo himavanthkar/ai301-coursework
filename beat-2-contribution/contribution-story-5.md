@@ -74,6 +74,40 @@ a second PR, unless the maintainer prefers one PR.
 
 ---
 
+## Reproduction
+
+2026-11-19, branch `feat/297-status-timeout` from upstream master `8c52086`.
+
+Baseline before any change (`uv run pytest -m "not integration" -q`): 5 failed, 348 passed,
+86 skipped, 12 xfailed. The 5 failures are on the unmodified base: 3 hydra tests (the
+environment-dependent ones from #257) and 2 `test_order_of_flags_in_sbatch_args_from_cli_is_preserved`
+cases I have not investigated.
+
+I have no cluster access, so I reproduced at the function level: a fake remote whose `get_output`
+never returns, passed to `get_cluster_status("rorqual", ...)`, with a 10 s outer limit:
+
+```
+still waiting after 10.0s: get_cluster_status never returned; gave up
+```
+
+Failing tests, committed alone:
+[e75425a](https://github.com/himavanthkar/cluv/commit/e75425a). One for `get_cluster_status`, one
+for `fetch_live_job_info`. On the unfixed code:
+
+```
+E                   TimeoutError
+FAILED tests/test_status.py::test_get_cluster_status_times_out_on_unresponsive_cluster
+FAILED tests/test_status.py::test_fetch_live_job_info_times_out_on_unresponsive_cluster
+2 failed in 6.60s
+```
+
+Choices the plan may change: the constant name `CLUSTER_TIMEOUT_SECONDS` and the exact warning
+text (taken from the issue). Lint (`uvx 'pre-commit<4.0.0' run --files tests/test_status.py`): all
+hooks passed.
+
+---
+
 ## Status
 
-2026-11-19: claimed, waiting for the maintainer's answer on one PR or two. No branch yet.
+2026-11-19: claimed; reproduction and failing tests pushed to my fork. Waiting for the
+maintainer's answer on one PR or two. Next: `plan.md` and plan-check.
