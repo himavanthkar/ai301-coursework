@@ -1,12 +1,12 @@
-My first open source contribution was merged this week. I fixed a bug in cluv, a tool from Mila that researchers use to run jobs on computing clusters.
+I fixed a bug in cluv, an open source tool from Mila that researchers use to run jobs on computing clusters. Two maintainers approved my fix with no changes requested and it was merged on November 16.
 
-The bug was small but risky: when every job failed to start, the tool still reported success. Any script that depended on it would carry on as if nothing was wrong. My fix makes the tool report the failure, so the script can stop.
+Here is what was wrong. When every job failed to start, the tool still reported success. A script that depended on it would keep going as if nothing was wrong. Now the tool reports the failure and the script can stop.
 
-What I am most proud of is the process. Before writing any code, I proved the bug with a test that failed. I also built my own set of checks, a kind of checklist that reviews my work before anyone else sees it. Those checks caught three of my own mistakes: a wrong sentence in my first comment, a plan that treated an open question as settled, and a setup problem that would have sent other people's changes with mine.
+Before I wrote any code I proved the bug with a test that failed. I also built my own checks that review my work before a maintainer sees it. They caught three of my mistakes. One was a wrong sentence in my first comment. One was a plan that treated an open question as settled. One was a setup problem that would have sent other people's changes along with mine.
 
-Two maintainers approved the fix with no changes requested, and it was merged on November 16.
+I used Claude Code as an assistant and said so in the pull request.
 
-What I learned: small, careful work earns trust. I used Claude Code as an assistant and said so in the pull request.
+Next up is a second cluv pull request that is waiting for review. I have also claimed issues in two more projects.
 
 Thank you to the cluv maintainers for the fast and kind review.
 
