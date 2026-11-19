@@ -1,4 +1,4 @@
-I fixed a bug in cluv, an open source tool from Mila that researchers use to run jobs on computing clusters. Two maintainers approved my fix with no changes requested and it was merged on November 16.
+My first open source contribution was merged on November 16. I fixed a bug in cluv, a tool from Mila that researchers use to run jobs on computing clusters. Two maintainers approved the fix with no changes requested.
 
 Here is what was wrong. When every job failed to start, the tool still reported success. A script that depended on it would keep going as if nothing was wrong. Now the tool reports the failure and the script can stop.
 
