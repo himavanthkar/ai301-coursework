@@ -182,3 +182,43 @@ Claim drafted, checked and posted. Fork, branch and baseline done. No fix code w
 - Issue: https://github.com/wehnsdaefflae/llmsectest/issues/36
 - llmsectest CONTRIBUTING.md and PR template
 - PR #34, the model change named in the issue: https://github.com/wehnsdaefflae/llmsectest/pull/34
+
+---
+
+## 2026-11-20 to 2026-11-24: owner's answer, tests, fix, PR draft
+
+**Maintainer feedback (2026-11-20, wehnsdaefflae, owner):** my three observations match the code.
+Use `attempted - inconclusive - voided` as the denominator, not `attempted - inconclusive`. Have
+the helper take counts, not rows, so `qa/category_firing_rates.py` can call it. Keep my
+small-sample handling. "The issue is yours. Open the pull request whenever it's ready."
+
+**What I did (2026-11-24), base upstream `main` at `2451305`:**
+- Baseline: ruff "All checks passed!", 1141 passed, coverage 88% (with `PYTHONPATH` set, see
+  below).
+- Tests first, committed alone: [f2a9d1b](https://github.com/himavanthkar/llmsectest/commit/f2a9d1b).
+  Against unmodified source: `9 failed, 15 passed in 0.09s`.
+- Fix: [fb4495e](https://github.com/himavanthkar/llmsectest/commit/fb4495e) adds
+  `bootstrap_interval(events, samples)` (percentile bootstrap, 10,000 resamples, 95%, fixed
+  seed) and the row fields `scored`, `finding_rate`, `confidence`, `confidence_lower`,
+  `confidence_upper`, or `confidence_note` under 30 samples. Changelog:
+  [8df5309](https://github.com/himavanthkar/llmsectest/commit/8df5309).
+- With the fix: `24 passed` in the tally tests, `1150 passed` in the full suite, coverage 88%.
+  Pinned example: 12 of 43 gives 0.1628 to 0.4186.
+
+**Toolkit**
+- plan-check, separate `claude -p` run: **accept**, all six checks pass. It could not verify
+  that the test commit was pushed or where "upstream CI passes" came from; I checked both by
+  hand and added the source to the plan. It also flagged that `procedure.md` is written for
+  eval bundles and has no step for checking factual claims in the comment.
+- ship-gate, run 1: **STOP** on the repo's test check. One unrelated test failed because my
+  manifest used a relative `PYTHONPATH=src`, and that test starts a scan from a temp folder.
+- ship-gate, run 2 (absolute path in the manifest): **PASS**. pr-precheck: all five checks
+  pass. Voice guard on `pr_draft.md`: pass.
+- Difficulty: on my machine macOS flags the `.pth` files in `.venv` as hidden and Python
+  3.14 skips them, so the editable install is not importable and 2 tests fail on unmodified
+  `main` without `PYTHONPATH`. Clearing the flag fixed the import once, then the flag came back.
+
+**Open question for the owner (in the PR draft):** with zero findings the percentile bootstrap
+gives a zero-width interval (0 of 43 gives 0.0 to 0.0).
+
+**Status:** PR drafted, not opened yet.
