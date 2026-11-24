@@ -49,10 +49,15 @@ failure handling, and one question with my default: `LOCAL_ONLY_PROSE_TYPES` for
 
 ## Status
 
-2026-11-24: claimed, fork cloned. Blocked on two things:
+2026-11-24: claimed, fork cloned, not assigned yet. No code yet.
 
-- Nimbus needs Bun, which is not installed, and `node` and `curl` are blocked by a security
-  wrapper in my workspace. I have not decided whether to install Bun.
-- The Stack Overflow for Teams API v3 docs could not be read without a login (the Swagger spec
-  returned 401 and the help-center links redirect to a support home page), so the answers
-  endpoint is not confirmed yet.
+- Bun: I installed Bun 1.4.5 with Homebrew (CI uses 1.4). `bun install --frozen-lockfile`
+  installed 1061 packages, and the two existing Stack Overflow test files give `28 pass, 0 fail`
+  on `main` at `5b1d570e2`.
+- Answers endpoint: the live Swagger spec needs a login, so I read the official SDK repo
+  (StackExchange/StackOverflowSDK, generated from its `swagger.json`, last pushed 2025-11-10).
+  It lists answers per question only: `GET /teams/{team}/questions/{questionId}/answers`, with
+  `page` and `pageSize` (15, 30, 50 or 100) and the same envelope as questions. List items have
+  `body`, `isAccepted` and `questionId` but not `bodyMarkdown`. It says nothing about whether
+  question and answer ids can be equal, and nothing about rate limits. This is not checked
+  against the live API.
