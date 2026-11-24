@@ -4,7 +4,7 @@
 **Student:** Himavanth Karpurapu
 **GitHub Username:** himavanthkar
 **Issue:** https://github.com/nimbus-agent/Nimbus/issues/951
-**Pull Request:** not opened yet (claimed 2026-11-24, blocked, see Status)
+**Pull Request:** https://github.com/nimbus-agent/Nimbus/pull/2144
 
 <!--
 Extra contribution, not graded. Sections marked REWRITE are drafts for me to put in my own words.
@@ -47,17 +47,43 @@ failure handling, and one question with my default: `LOCAL_ONLY_PROSE_TYPES` for
 
 ---
 
+## Build and PR (2026-11-24)
+
+Branch `feat/951-stackoverflow-answers` from upstream `main` at `5b1d570e2`, five commits, 9 files,
++917/-155.
+
+- Mapper unit test committed alone first
+  ([ed21871a5](https://github.com/himavanthkar/Nimbus/commit/ed21871a5)): `0 pass, 1 fail,
+  1 error` before the mapper existed, `17 pass` after.
+- `stackoverflow-answer-mapping.ts`: type `answer`, `externalId` `answer/<id>`, body through the
+  body-depth store, `question_id` and `is_accepted` in metadata; deleted answers and rows without
+  a numeric id are skipped.
+- `stackoverflow-sync.ts`: an answers pass after the question walk, one request per question
+  with `answerCount` above zero, at most 40 requests per sync, continued on the next sync through
+  the cursor. A 404 skips that question; any other failure ends the pass and leaves the
+  questions as written.
+- `stackoverflow:answer` in `LOCAL_ONLY_PROSE_TYPES`; roadmap row updated.
+- Results: fake-server files `18 pass`; related suites `13128 pass, 0 fail`; typecheck exit 0;
+  39 of 40 fast-preflight gates pass. `audit:js-licenses` fails on unmodified `main` on my
+  machine too (a macOS arm64 platform package).
+
+**Toolkit**
+- plan-check run 1: **reject**, on the draft comment only. It did not say I had moved the
+  answer tests out of the file the maintainer named (the file hit `audit:file-size`'s 500-line
+  cap). I added the line; the PR description already had it. Run 2: **accept**.
+- ship-gate run 1: **STOP**. 5 of 13,133 tests failed in a run that took 34 minutes. A direct
+  re-run of the same command passed in 192 s (`13128 pass, 0 fail`), so I treated the slow run
+  as the cause. I did not find out which five tests failed, because the gate keeps only the
+  tail of the output. Run 2: **PASS** (tests ok in 181 s), pr-precheck all five checks.
+- Voice guard: pass on the PR description.
+- Mistakes of mine the checks caught before commit: my fake answers route never matched, so
+  four cases failed; the test file crossed the size cap; Biome formatting.
+
+Stated in the PR: the API facts come from a year-old SDK repo and are not checked against the
+live API; I was not assigned when I opened it; the bound of 40 and the other choices are mine.
+
+---
+
 ## Status
 
-2026-11-24: claimed, fork cloned, not assigned yet. No code yet.
-
-- Bun: I installed Bun 1.4.5 with Homebrew (CI uses 1.4). `bun install --frozen-lockfile`
-  installed 1061 packages, and the two existing Stack Overflow test files give `28 pass, 0 fail`
-  on `main` at `5b1d570e2`.
-- Answers endpoint: the live Swagger spec needs a login, so I read the official SDK repo
-  (StackExchange/StackOverflowSDK, generated from its `swagger.json`, last pushed 2025-11-10).
-  It lists answers per question only: `GET /teams/{team}/questions/{questionId}/answers`, with
-  `page` and `pageSize` (15, 30, 50 or 100) and the same envelope as questions. List items have
-  `body`, `isAccepted` and `questionId` but not `bodyMarkdown`. It says nothing about whether
-  question and answer ids can be equal, and nothing about rate limits. This is not checked
-  against the live API.
+2026-11-24: PR #2144 open. Waiting for the maintainer.
