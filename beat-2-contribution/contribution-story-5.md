@@ -4,7 +4,7 @@
 **Student:** Himavanth Karpurapu
 **GitHub Username:** himavanthkar
 **Issue:** https://github.com/mila-iqia/cluv/issues/297
-**Pull Request:** not opened yet (claimed 2026-11-19)
+**Pull Request:** https://github.com/mila-iqia/cluv/pull/303 (timeout part; live table to follow)
 
 <!--
 Extra contribution, not graded. Sections are filled only as far as the work has gone.
@@ -107,7 +107,42 @@ hooks passed.
 
 ---
 
+## Plan, fix, PR (2026-11-24)
+
+Rebased onto upstream master `346288b`; the test-only commit became
+[cd79b24](https://github.com/himavanthkar/cluv/commit/cd79b24). Baseline there:
+`5 failed, 392 passed, 86 skipped, 12 xfailed` (3 hydra tests, and 2 flag-order tests that fail
+because my clone path has spaces; upstream CI passes on that commit).
+
+Fix ([a63918b](https://github.com/himavanthkar/cluv/commit/a63918b)): a
+`CLUSTER_TIMEOUT_SECONDS = 30.0` constant, and `get_cluster_status()` / `fetch_live_job_info()`
+wrap their old bodies in `asyncio.wait_for`. On timeout they log
+"Connection to <cluster> timeout after 30 seconds" and return the existing empty result. One
+docs sentence ([4f0ecfb](https://github.com/himavanthkar/cluv/commit/4f0ecfb)) and a third
+test that one hanging cluster does not hold back one that answers.
+
+After: repro with the limit at 3 s `returned after 3.0s: online=False`; `3 passed in 1.13s`;
+full suite `5 failed, 395 passed` (the same 5).
+
+Thread: tesfaldet (not a maintainer by GitHub role) suggested on 2026-11-24 a timeout for every
+command. I kept the PR to `cluv status` and said why in the description. hvdbm had not answered
+my one-PR-or-two question, so I followed my stated default: timeout first.
+
+**Toolkit**
+- plan-check, separate `claude -p` run: **accept**, all six checks. It flagged that my evidence
+  file still held numbers from the old base; I re-ran them on `cd79b24` (`2 failed in 7.13s`).
+- ship-gate run 1: **PASS**, with one slip noted (I wrote "two sentences" of docs; it is one).
+- ship-gate run 2, after fixing that wording: **STOP**. One of my own new tests failed. It
+  failed in about 1 full-suite run in 6: a test that runs `main()` with `--quiet` leaves the
+  `cluv` logger at CRITICAL for later tests in the same xdist worker, so the warning never
+  reached `caplog`. Fix: `caplog.at_level("WARNING", logger="cluv")`
+  ([8a0c23c](https://github.com/himavanthkar/cluv/commit/8a0c23c)); 15 full-suite runs in a row
+  passed afterwards.
+- ship-gate run 3: **PASS**, pr-precheck all five checks. Voice guard: pass.
+- What changed: `ship-manifest.md` now excludes the 2 path-with-spaces tests with a dated reason.
+
+---
+
 ## Status
 
-2026-11-19: claimed; reproduction and failing tests pushed to my fork. Waiting for the
-maintainer's answer on one PR or two. Next: `plan.md` and plan-check.
+2026-11-24: PR #303 opened for the timeout. Waiting for review. The live table is still to do.
