@@ -222,3 +222,20 @@ small-sample handling. "The issue is yours. Open the pull request whenever it's 
 gives a zero-width interval (0 of 43 gives 0.0 to 0.0).
 
 **Status:** PR opened 2026-11-24: https://github.com/wehnsdaefflae/llmsectest/pull/48 (3 files, +208). Waiting for the owner's review.
+
+### 2026-11-24, later: Copilot review on PR #48
+
+Copilot's review flagged that `bootstrap_interval` did not validate `resamples` or
+`confidence`. I checked: `resamples=0` raised `IndexError: list index out of range`, and
+`confidence=-0.5` returned bounds in the wrong order (0.3256 to 0.2326). I committed Copilot's
+suggested validation from GitHub ([82df82d](https://github.com/himavanthkar/llmsectest/commit/82df82d)),
+and tests for it were added in [249c0d1](https://github.com/himavanthkar/llmsectest/commit/249c0d1)
+(eight parametrized cases). Full suite: `1158 passed`, coverage 88%. CI on the PR: all green
+before these commits.
+
+Mistake to record: Claude Code wrote the same validation locally without fetching first, the
+push was rejected, and a PR comment naming the unpushed commit was posted anyway because the
+commands were chained with `;`. The duplicate commit was dropped, the tests were rebased onto
+82df82d and pushed, and the comment was edited to name the real commits, with a note that it
+was edited. Rule from this: fetch before committing on a PR branch, and chain a comment to its
+push with `&&`.
