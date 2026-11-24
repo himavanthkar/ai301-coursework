@@ -4,7 +4,7 @@
 **Student:** Himavanth Karpurapu
 **GitHub Username:** himavanthkar
 **Issue:** https://github.com/wehnsdaefflae/llmsectest/issues/36
-**Pull Request:** not opened yet (waiting on the owner's answer to my question)
+**Pull Request:** https://github.com/wehnsdaefflae/llmsectest/pull/48
 
 <!--
 Extra contribution, not graded. Sections are filled only as far as the work has gone.
@@ -221,4 +221,4 @@ small-sample handling. "The issue is yours. Open the pull request whenever it's 
 **Open question for the owner (in the PR draft):** with zero findings the percentile bootstrap
 gives a zero-width interval (0 of 43 gives 0.0 to 0.0).
 
-**Status:** PR drafted, not opened yet.
+**Status:** PR opened 2026-11-24: https://github.com/wehnsdaefflae/llmsectest/pull/48 (3 files, +208). Waiting for the owner's review.
